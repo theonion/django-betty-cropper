@@ -2,9 +2,14 @@ import requests
 
 from django import forms
 
+try:  # No checks in django 1.5
+    from django.core import checks
+except ImportError:
+    pass
+
 from django.utils import six
 from django.utils.encoding import smart_text
-from django.core import exceptions, checks
+from django.core import exceptions
 from django.core.cache import cache
 from django.db.models.fields import Field
 from django.core.files.base import File
