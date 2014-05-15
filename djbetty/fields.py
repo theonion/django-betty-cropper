@@ -23,7 +23,7 @@ default_storage = BettyCropperStorage()
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^betty\.cropped\.fields\.ImageField"])
+    add_introspection_rules([], ["^djbetty\.fields\.ImageField"])
 except ImportError:
     pass
 
