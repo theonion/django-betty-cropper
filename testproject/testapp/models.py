@@ -1,6 +1,6 @@
 from django.db import models
 
-from djbetty import ImageField
+from djbetty.fields import ImageField
 
 
 class TestModel(models.Model):
