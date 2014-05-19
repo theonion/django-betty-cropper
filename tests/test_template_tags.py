@@ -1,6 +1,7 @@
 from django.template import Template, Context
 from django.test import TestCase
 
+from djbetty.conf import settings
 
 from testproject.testapp.models import TestModel
 
@@ -40,3 +41,15 @@ class TemplateTagTestCase(TestCase):
 
         c = Context({"image": None})
         self.assertEquals(t.render(c), '<img src="http://example.com/betty/666/original/600.jpg" />')
+
+    def test_no_default_image(self):
+        settings.BETTY_DEFAULT_IMAGE = None
+        t = Template('{% load betty %}<img src="{% cropped_url image %}" />')
+        
+        c = Context({"image": None})
+        self.assertEquals(t.render(c), '<img src="" />')
+
+        c = Context({"image": ""})
+        self.assertEquals(t.render(c), '<img src="" />')
+
+        settings.BETTY_DEFAULT_IMAGE = 666

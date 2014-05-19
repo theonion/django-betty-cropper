@@ -37,6 +37,8 @@ def coerce_image(image):
         except:
             if settings.BETTY_DEFAULT_IMAGE:
                 image_id = settings.BETTY_DEFAULT_IMAGE
+            else:
+                return None
         image = AnonymousImageField(image_id)
 
     return image
