@@ -56,7 +56,7 @@ def cropped_url(image, ratio="original", width=600, format="jpg"):
 @register.simple_tag(takes_context=True)
 def cropped(context, image, ratio="original", width=600, format="jpg"):
     image = coerce_image(image)
-    if image.id is None or image is None:
+    if image is None or image.id is None:
         if settings.BETTY_DEFAULT_IMAGE:
             image = AnonymousImageField(settings.BETTY_DEFAULT_IMAGE)
         else:
