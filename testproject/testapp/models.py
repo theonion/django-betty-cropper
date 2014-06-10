@@ -5,8 +5,8 @@ from djbetty.fields import ImageField
 
 class TestModel(models.Model):
 
-    image_caption = models.CharField(max_length=255)
-    image_alt = models.CharField(max_length=255)
+    image_caption = models.CharField(max_length=255, null=True, blank=True)
+    image_alt = models.CharField(max_length=255, null=True, blank=True)
 
     listing_image = ImageField(null=True, blank=True)
     image = ImageField(alt_field="image_alt", caption_field="image_caption", null=True, blank=True)

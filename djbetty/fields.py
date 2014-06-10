@@ -235,11 +235,16 @@ class ImageField(Field):
         return image_file.id
 
     def validate(self, value, model_instance):
-        super(ImageField, self).validate(self, value, model_instance)
-        try:
-            int(value)
-        except ValueError:
-            exceptions.ValidationError("This field cannot be a string")
+        super(ImageField, self).validate(value, model_instance)
+        if isinstance(value, ImageFieldFile):
+            if value.id is not None:
+                if not isinstance(value.id, int):
+                    raise exceptions.ValidationError("This field must be an int")
+        else:
+            try:
+                int(value)
+            except ValueError:
+                raise exceptions.ValidationError("This field must be an int")
 
     def contribute_to_class(self, cls, name):
         super(ImageField, self).contribute_to_class(cls, name)

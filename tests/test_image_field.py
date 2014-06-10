@@ -4,6 +4,7 @@ import os
 from six.moves.urllib.parse import urljoin
 
 from django.core.files import File
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from djbetty.conf import settings
@@ -57,6 +58,21 @@ class ImageFieldTestCase(TestCase):
         test_object.save()
 
         self.assertEqual(test_object.listing_image.id, 12345)
+
+    def test_validate(self):
+        test_object = TestModel()
+        test_object.image = 12345
+        test_object.full_clean()
+
+        test_object.image = None
+        test_object.full_clean()
+
+        test_object.image = "12345"
+        test_object.full_clean()
+
+        with self.assertRaises(ValidationError):
+            test_object.image = "abcdef"
+            test_object.full_clean()
 
     def test_charfield_save(self):
         """DRF seems to want to save fields it doesn't know about as CharFields,
