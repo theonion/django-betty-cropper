@@ -55,13 +55,13 @@ class BettyCropperStorage(Storage):
     def get_available_name(self, image_id):
         return image_id
 
-    def _save(self, image_id, content):
+    def _save(self, name, content):
         endpoint = "{base_url}/api/new".format(base_url=self.base_url)
 
-        data = {"name": image_id}
+        data = {"name": name}
         files = {"image": content}
 
-        r = requests.post(endpoint, data=data, files=files, headers=self.auth_headers)
+        r = requests.post(endpoint, files=files, headers=self.auth_headers)
         if r.status_code != 200:
             raise IOError("Save failed")
 
