@@ -14,7 +14,7 @@ from httmock import urlmatch, HTTMock
 import requests  # noqa
 
 
-TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), 'images')
+TEST_DATA_PATH = os.path.join(os.path.dirname(__file__), "images")
 
 TEST_IMAGE_DATA = json.dumps({
     "id": 12345,
@@ -26,7 +26,7 @@ TEST_IMAGE_DATA = json.dumps({
 }).encode("UTF-8")
 
 
-@urlmatch(path=r'.*api/new$')
+@urlmatch(path=r".*api/new$")
 def betty_new_mock(url, request):
     return {
         "status_code": 200,
@@ -51,6 +51,7 @@ class ImageFieldTestCase(TestCase):
             self.base_url = self.base_url[:-1]
         self._old_betty_image_url = settings.BETTY_IMAGE_URL
         settings.BETTY_IMAGE_URL = self.base_url
+        settings.BETTY_ADMIN_URL = settings.BETTY_IMAGE_URL
 
     def test_fileless_save(self):
         test_object = TestModel()
@@ -84,7 +85,7 @@ class ImageFieldTestCase(TestCase):
         self.assertEqual(test.image, None)
 
     def test_save(self):
-        lenna_path = os.path.join(TEST_DATA_PATH, 'Lenna.png')
+        lenna_path = os.path.join(TEST_DATA_PATH, "Lenna.png")
         with open(lenna_path, "rb") as lenna:
             test = TestModel()
             with HTTMock(betty_new_mock):
@@ -98,7 +99,7 @@ class ImageFieldTestCase(TestCase):
             self.assertEqual(test.image.name, "Lenna.png")
 
     def test_listing_image(self):
-        lenna_path = os.path.join(TEST_DATA_PATH, 'Lenna.png')
+        lenna_path = os.path.join(TEST_DATA_PATH, "Lenna.png")
         with open(lenna_path, "rb") as lenna:
             test = TestModel()
             with HTTMock(betty_new_mock):
@@ -109,7 +110,7 @@ class ImageFieldTestCase(TestCase):
         self.assertEqual(test.listing_image.caption, None)
 
     def test_alt_and_caption(self):
-        lenna_path = os.path.join(TEST_DATA_PATH, 'Lenna.png')
+        lenna_path = os.path.join(TEST_DATA_PATH, "Lenna.png")
         with open(lenna_path, "rb") as lenna:
             test = TestModel()
             with HTTMock(betty_new_mock):
