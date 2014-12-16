@@ -1,9 +1,12 @@
 from __future__ import absolute_import
 
+try:
+    from urllib.parse import urlparse, urlunparse
+except ImportError:
+    from urlparse import urlparse, urlunparse
 
 from django import template
 from django.template.loader import select_template
-from django.utils.six.moves import urllib
 
 from djbetty.conf import settings
 from djbetty.fields import ImageFieldFile, default_storage
@@ -78,9 +81,9 @@ def cropped(context, image, ratio="original", width=600, format="jpg"):
 def betty_js_url():
     betty_image_url = settings.BETTY_IMAGE_URL
     # make the url protocol-relative
-    url_parts = list(urllib.parse.urlparse(betty_image_url))
+    url_parts = list(urlparse(betty_image_url))
     url_parts[0] = ""
-    betty_image_url = urllib.parse.urlunparse(url_parts)
+    betty_image_url = urlunparse(url_parts)
     return "{}/image.js".format(betty_image_url)
 
 
@@ -88,7 +91,7 @@ def betty_js_url():
 def betty_image_url():
     url = settings.BETTY_IMAGE_URL
     # make the url protocol-relative
-    url_parts = list(urllib.parse.urlparse(url))
+    url_parts = list(urlparse(url))
     url_parts[0] = ""
-    url = urllib.parse.urlunparse(url_parts)
+    url = urlunparse(url_parts)
     return url
