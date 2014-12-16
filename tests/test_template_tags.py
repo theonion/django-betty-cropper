@@ -8,6 +8,10 @@ from testproject.testapp.models import TestModel
 
 class TemplateTagTestCase(TestCase):
 
+    def test_image_js_template_tag(self):
+        t = Template("{% load betty %}<script src=\"{% betty_js_url %}\"></script>")
+        self.assertEquals(t.render(Context()), "<script src=\"//example.com/betty/image.js\"></script>")
+
     def test_cropped_template_tag(self):
         test_object = TestModel()
         test_object.listing_image.id = 12345
