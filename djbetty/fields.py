@@ -215,6 +215,8 @@ class ImageField(Field):
     def get_prep_value(self, value):
         if value is None:
             return None
+        if isinstance(value, ImageFieldFile):
+            return int(value.id)
         return int(value)
 
     def get_prep_lookup(self, lookup_type, value):
@@ -273,3 +275,7 @@ class ImageField(Field):
             defaults['required'] = False
         defaults.update(kwargs)
         return super(ImageField, self).formfield(**defaults)
+
+    def value_to_string(self, obj):
+        value = self._get_val_from_obj(obj)
+        return str(self.value.id)
