@@ -216,6 +216,8 @@ class ImageField(Field):
         if value is None:
             return None
         if isinstance(value, ImageFieldFile):
+            if value.id is None:
+                return None
             return int(value.id)
         return int(value)
 
