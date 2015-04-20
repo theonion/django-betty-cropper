@@ -27,7 +27,7 @@ class AnonymousImageField(object):
 def coerce_image(image):
     """For right now, we need to be able to pass a string, or an int, or None
     into the template tags, and still have them return something meaningful"""
-    
+
     if image is None:
         if settings.BETTY_DEFAULT_IMAGE:
             # If we have a default image, let's use that.
@@ -50,7 +50,7 @@ def coerce_image(image):
 
 
 @register.simple_tag
-def cropped_url(image, ratio="original", width=600, format="jpg"):
+def cropped_url(image, ratio="16x9", width=600, format="jpg"):
     image = coerce_image(image)
     if image is None:
         return ""
@@ -59,7 +59,7 @@ def cropped_url(image, ratio="original", width=600, format="jpg"):
 
 
 @register.simple_tag(takes_context=True)
-def cropped(context, image, ratio="original", width=600, format="jpg"):
+def cropped(context, image, ratio="16x9", width=600, format="jpg"):
     image = coerce_image(image)
     if image is None or image.id is None:
         if settings.BETTY_DEFAULT_IMAGE:
