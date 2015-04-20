@@ -17,7 +17,7 @@ class TemplateTagTestCase(TestCase):
         test_object.listing_image.id = 12345
         t = Template("{% load betty %}{% cropped image %}")
         c = Context({"image": test_object.listing_image})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/600.jpg" />')
 
         t = Template('{% load betty %}{% cropped image width=900 ratio="16x9" format="png" %}')
         self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/900.png" />')
@@ -27,29 +27,29 @@ class TemplateTagTestCase(TestCase):
         test_object.listing_image.id = 12345
         t = Template('{% load betty %}<img src="{% cropped_url image %}" />')
         c = Context({"image": test_object.listing_image})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/600.jpg" />')
 
-        t = Template('{% load betty %}<img src="{% cropped_url image width=900 ratio="16x9" format="png" %}" />')
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/900.png" />')
+        t = Template('{% load betty %}<img src="{% cropped_url image width=900 ratio="1x1" format="png" %}" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/1x1/900.png" />')
 
     def test_image_id(self):
         t = Template('{% load betty %}<img src="{% cropped_url image %}" />')
         c = Context({"image": 12345})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/600.jpg" />')
 
         c = Context({"image": "12345"})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/600.jpg" />')
 
         c = Context({"image": ""})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/666/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/666/16x9/600.jpg" />')
 
         c = Context({"image": None})
-        self.assertEquals(t.render(c), '<img src="http://example.com/betty/666/original/600.jpg" />')
+        self.assertEquals(t.render(c), '<img src="http://example.com/betty/666/16x9/600.jpg" />')
 
     def test_no_default_image(self):
         settings.BETTY_DEFAULT_IMAGE = None
         t = Template('{% load betty %}<img src="{% cropped_url image %}" />')
-        
+
         c = Context({"image": None})
         self.assertEquals(t.render(c), '<img src="" />')
 
