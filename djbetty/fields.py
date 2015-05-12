@@ -29,7 +29,7 @@ except ImportError:
 
 
 class ImageFieldFile(FieldFile):
-    
+
     def __init__(self, instance, field, id):
         super(ImageFieldFile, self).__init__(instance, field, None)
         self.id = id
@@ -120,6 +120,16 @@ class ImageDescriptor(FileDescriptor):
     This is almost an exact replica of the FileDescriptor class, with
     the notable exception that it works using an integer as an initial
     value, rather than a string."""
+
+    def __set__(self, instance, value):
+        if isinstance(value, dict):
+            instance.__dict__[self.field.name] = value.get("id")
+            if self.field.caption_field:
+                instance.__dict__[self.field.caption_field] = value.get("caption")
+            if self.field.alt_field:
+                instance.__dict__[self.field.alt_field] = value.get("alt")
+        else:
+            instance.__dict__[self.field.name] = value
 
     def __get__(self, instance=None, owner=None):
         if instance is None:
@@ -233,6 +243,10 @@ class ImageField(Field):
                 return None
             raise exceptions.ValidationError("This field cannot be a string")
 
+        if isinstance(image_file, dict):
+            # Looks like someone passed the dictionary form...
+            return image_file["id"]
+
         if image_file and not image_file._committed:
             # Commit the file to storage prior to saving the model
             image_file.save(image_file.name, image_file, save=False)
@@ -280,4 +294,4 @@ class ImageField(Field):
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
-        return str(self.value.id)
+        return str(value.id)
