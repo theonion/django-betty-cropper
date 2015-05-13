@@ -6,6 +6,7 @@ python:
 env:
   - DJANGO_VERSION=1.6
   - DJANGO_VERSION=1.7.1
+  - DJANGO_VERSION=1.8
 cache:
   directories:
     - "$HOME/.pip-cache/"
