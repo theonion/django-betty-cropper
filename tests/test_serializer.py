@@ -20,3 +20,15 @@ class ImageSerializerTestCase(TestCase):
         assert test.image.id == 3
         assert test.image.alt == "some alt"
         assert test.image.caption == "some pig"
+
+        # Now le't skill the caption/alt
+        test.image.alt = None
+        test.image.caption = None
+
+        serializer = TestModelSerializer(test)
+        assert serializer.data["image"] == {
+            "id": 3,
+            "alt": None,
+            "caption": None
+        }
+        assert serializer.data["listing_image"] is None

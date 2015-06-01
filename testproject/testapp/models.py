@@ -17,7 +17,9 @@ class TestModel(models.Model):
 
 class TestModelSerializer(serializers.ModelSerializer):
 
-    ImageFieldSerializer(allow_null=True, read_only=True)
+    image = ImageFieldSerializer(required=False)
+    listing_image = ImageFieldSerializer(required=False)
 
     class Meta:
         model = TestModel
+        exclude = ("image_caption", "image_alt")

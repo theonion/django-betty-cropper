@@ -9,10 +9,10 @@ class ImageFieldSerializer(serializers.Field):
         data = {
             "id": obj.id,
         }
-        if obj.alt:
+        if obj.field.alt_field:
             data["alt"] = obj.alt
 
-        if obj.caption:
+        if obj.field.caption_field:
             data["caption"] = obj.caption
         return data
 
