@@ -7,7 +7,8 @@ from djbetty.conf import settings
 
 class BettyCropperStorage(Storage):
 
-    def __init__(self, base_url=None, public_token=None, private_token=None):
+    def __init__(self, base_url=None, admin_url=None, public_token=None, private_token=None):
+        self._admin_url = admin_url
         self._base_url = base_url
         self._public_token = public_token
         self._private_token = private_token
@@ -15,6 +16,16 @@ class BettyCropperStorage(Storage):
     @property
     def auth_headers(self):
         return {"X-Betty-Api-Key": self.public_token}
+
+    @property
+    def admin_url(self):
+        base_url = self._admin_url
+        if not base_url:
+            base_url = settings.BETTY_ADMIN_URL
+        if base_url.endswith("/"):
+            base_url = base_url[:-1]
+
+        return base_url
 
     @property
     def base_url(self):
@@ -42,7 +53,7 @@ class BettyCropperStorage(Storage):
         raise NotImplementedError()
 
     def exists(self, image_id):
-        detail_url = "{base_url}/api/{id}".format(base_url=self.base_url, id=image_id)
+        detail_url = "{base_url}/api/{id}".format(base_url=self.admin_url, id=image_id)
         r = requests.get(detail_url, headers=self.auth_headers)
         return r.status_code == 200
 
@@ -56,7 +67,7 @@ class BettyCropperStorage(Storage):
         return image_id
 
     def _save(self, name, content):
-        endpoint = "{base_url}/api/new".format(base_url=self.base_url)
+        endpoint = "{base_url}/api/new".format(base_url=self.admin_url)
 
         data = {"name": name}
         files = {"image": content}
