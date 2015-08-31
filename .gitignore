@@ -1,9 +1,8 @@
 *.py[co]
-
 .Python
 bin
 include
 lib
-
 dist
 *.egg-info
+.idea/
