@@ -28,8 +28,8 @@ def coerce_image(image):
     """For right now, we need to be able to pass a string, or an int, or None
     into the template tags, and still have them return something meaningful"""
 
-    if image is None:
-        if settings.BETTY_DEFAULT_IMAGE:
+    if not image:
+        if hasattr(settings, 'BETTY_DEFAULT_IMAGE') and settings.BETTY_DEFAULT_IMAGE != None:
             # If we have a default image, let's use that.
             return AnonymousImageField(settings.BETTY_DEFAULT_IMAGE)
         else:
@@ -62,7 +62,7 @@ def cropped_url(image, ratio="16x9", width=600, format="jpg"):
 def cropped(context, image, ratio="16x9", width=600, format="jpg"):
     image = coerce_image(image)
     if not image or not image.id:
-        if settings.BETTY_DEFAULT_IMAGE:
+        if hasattr(settings, 'BETTY_DEFAULT_IMAGE'):
             image = AnonymousImageField(settings.BETTY_DEFAULT_IMAGE)
         else:
             return ""
