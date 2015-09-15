@@ -22,6 +22,12 @@ class TemplateTagTestCase(TestCase):
         t = Template('{% load betty %}{% cropped image width=900 ratio="16x9" format="png" %}')
         self.assertEquals(t.render(c), '<img src="http://example.com/betty/1234/5/16x9/900.png" />')
 
+    def test_cropped_bad_value(self):
+        t = Template("{% load betty %}{% cropped image %}")
+        c = Context({"image": ""})
+        html = t.render(c)
+        self.assertEqual(html, '<img src="http://example.com/betty/666/16x9/600.jpg" />')
+
     def test_cropped_url_template_tag(self):
         test_object = TestModel()
         test_object.listing_image.id = 12345
