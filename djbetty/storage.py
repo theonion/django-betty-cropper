@@ -78,7 +78,7 @@ class BettyCropperStorage(Storage):
 
         return str(r.json()["id"])
 
-    def url(self, name, ratio="original", width=600, format="jpg"):
+    def url(self, name, ratio="original", width=600, format="jpg", fixed=0):
 
         id_string = ""
         for index, char in enumerate(str(name)):
@@ -86,8 +86,15 @@ class BettyCropperStorage(Storage):
                 id_string += "/"
             id_string += char
 
+        # Allows request to use fixed url from settings
+        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
+        if not base_url:
+            base_url = self.base_url
+
+        base_url = base_url.rstrip('/')
+
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
-            base_url=self.base_url,
+            base_url=base_url,
             id_string=id_string,
             ratio=ratio,
             width=width,

@@ -20,8 +20,8 @@ class AnonymousImageField(object):
         self.id = id
         self.storage = default_storage
 
-    def get_crop_url(self, ratio="original", width=600, format="jpg"):
-        return self.storage.url(self.id, ratio=ratio, width=width, format=format)
+    def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=0):
+        return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
 
 def coerce_image(image):
@@ -50,16 +50,16 @@ def coerce_image(image):
 
 
 @register.simple_tag
-def cropped_url(image, ratio="16x9", width=600, format="jpg"):
+def cropped_url(image, ratio="16x9", width=600, format="jpg", fixed=0):
     image = coerce_image(image)
     if image is None:
         return ""
 
-    return image.get_crop_url(ratio=ratio, width=width, format=format)
+    return image.get_crop_url(ratio=ratio, width=width, format=format, fixed=fixed)
 
 
 @register.simple_tag(takes_context=True)
-def cropped(context, image, ratio="16x9", width=600, format="jpg"):
+def cropped(context, image, ratio="16x9", width=600, format="jpg", fixed=0):
     image = coerce_image(image)
     if not image or not image.id:
         if hasattr(settings, 'BETTY_DEFAULT_IMAGE'):
@@ -68,7 +68,9 @@ def cropped(context, image, ratio="16x9", width=600, format="jpg"):
             return ""
 
     context["image"] = image
-    context["image_url"] = image.get_crop_url(ratio=ratio, width=width, format=format)
+    context["image_url"] = image.get_crop_url(
+        ratio=ratio, width=width, format=format, fixed=fixed
+    )
     context["ratio"] = ratio
     context["width"] = width
     context["format"] = format

@@ -110,8 +110,8 @@ class ImageFieldFile(FieldFile):
     def delete(self, save=True):
         raise NotImplemented("You can't delete a remote image this way")
 
-    def get_crop_url(self, ratio="original", width=600, format="jpg"):
-        return self.storage.url(self.id, ratio=ratio, width=width, format=format)
+    def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=0):
+        return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
 
 class ImageDescriptor(FileDescriptor):

@@ -31,6 +31,7 @@ def pytest_configure():
         ),
 
         BETTY_IMAGE_URL="http://example.com/betty/",
+        BETTY_FIXED_URL="http://anotherexample.com/betty/",
         BETTY_PUBLIC_KEY="noop",
         BETTY_PRIVATE_KEY="noop",
         BETTY_DEFAULT_IMAGE=0
