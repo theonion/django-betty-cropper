@@ -97,3 +97,13 @@ def betty_image_url():
     url_parts[0] = ""
     url = urlunparse(url_parts)
     return url
+
+
+@register.simple_tag
+def betty_fixed_url():
+    url = settings.BETTY_FIXED_URL
+    # make the url protocol-relative
+    url_parts = list(urlparse(url))
+    url_parts[0] = ""
+    url = urlunparse(url_parts)
+    return url
