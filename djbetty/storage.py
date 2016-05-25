@@ -49,6 +49,15 @@ class BettyCropperStorage(Storage):
             return self._private_token
         return settings.BETTY_PRIVATE_TOKEN
 
+    def build_id_string(self, name):
+        id_string = ""
+        for index, char in enumerate(str(name)):
+            if index % 4 == 0 and index != 0:
+                id_string += "/"
+            id_string += char
+
+        return id_string
+
     def delete(self, image_id):
         raise NotImplementedError()
 
@@ -66,6 +75,13 @@ class BettyCropperStorage(Storage):
     def get_available_name(self, image_id):
         return image_id
 
+    def build_base_url(self, fixed):
+        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
+        if not base_url:
+            base_url = self.base_url
+
+        return base_url.rstrip('/')
+
     def _save(self, name, content):
         endpoint = "{base_url}/api/new".format(base_url=self.admin_url)
 
@@ -78,24 +94,17 @@ class BettyCropperStorage(Storage):
 
         return str(r.json()["id"])
 
-    def url(self, name, ratio="original", width=600, format="jpg", fixed=0):
-
-        id_string = ""
-        for index, char in enumerate(str(name)):
-            if index % 4 == 0 and index != 0:
-                id_string += "/"
-            id_string += char
-
-        # Allows request to use fixed url from settings
-        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
-        if not base_url:
-            base_url = self.base_url
-
-        base_url = base_url.rstrip('/')
-
+    def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
-            base_url=base_url,
-            id_string=id_string,
+            base_url=self.build_base_url(fixed),
+            id_string=self.build_id_string(name),
             ratio=ratio,
             width=width,
             format=format)
+
+    def animated_url(self, name, format="gif", fixed=False):
+        return "{base_url}/{id_string}/animated/original.{format}".format(
+            base_url=self.build_base_url(fixed),
+            id_string=self.build_id_string(name),
+            format=format
+        )

@@ -66,3 +66,10 @@ class TemplateTagTestCase(TestCase):
         self.assertEquals(t.render(c), '<img src="" />')
 
         settings.BETTY_DEFAULT_IMAGE = 666
+
+    def test_animated_url_templated_tag(self):
+        t = Template('{% load betty %}<img src="{% animated_url image %}" />')
+        c = Context({"image": "12345"})
+        self.assertEqual(
+            t.render(c),
+            '<img src="http://example.com/betty/1234/5/animated/original.gif" />')
