@@ -52,7 +52,7 @@ class BettyCropperStorage(Storage):
     @property
     def id_string(self):
         id_string = ""
-        for index, char in enumerate(str(name)):
+        for index, char in enumerate(str(self.id)):
             if index % 4 == 0 and index != 0:
                 id_string += "/"
             id_string += char
