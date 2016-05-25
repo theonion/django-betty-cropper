@@ -49,6 +49,16 @@ class BettyCropperStorage(Storage):
             return self._private_token
         return settings.BETTY_PRIVATE_TOKEN
 
+    @property
+    def id_string(self):
+        id_string = ""
+        for index, char in enumerate(str(name)):
+            if index % 4 == 0 and index != 0:
+                id_string += "/"
+            id_string += char
+
+        return id_string
+
     def delete(self, image_id):
         raise NotImplementedError()
 
@@ -79,13 +89,6 @@ class BettyCropperStorage(Storage):
         return str(r.json()["id"])
 
     def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
-
-        id_string = ""
-        for index, char in enumerate(str(name)):
-            if index % 4 == 0 and index != 0:
-                id_string += "/"
-            id_string += char
-
         # Allows request to use fixed url from settings
         base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
         if not base_url:
@@ -95,18 +98,12 @@ class BettyCropperStorage(Storage):
 
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
             base_url=base_url,
-            id_string=id_string,
+            id_string=self.id_string,
             ratio=ratio,
             width=width,
             format=format)
 
     def animated_url(self, name, format="gif", fixed=False):
-        id_string = ""
-        for index, char in enumerate(str(name)):
-            if index % 4 == 0 and index != 0:
-                id_string += "/"
-            id_string += char
-
         # Allows request to use fixed url from settings
         base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
         if not base_url:
@@ -116,6 +113,6 @@ class BettyCropperStorage(Storage):
 
         return "{base_url}/{id_string}/animated/original.{format}".format(
             base_url=base_url,
-            id_string=id_string,
+            id_string=self.id_string,
             format=format
         )
