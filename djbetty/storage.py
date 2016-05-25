@@ -76,6 +76,15 @@ class BettyCropperStorage(Storage):
     def get_available_name(self, image_id):
         return image_id
 
+    def build_base_url(self, fixed):
+        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
+        if not base_url:
+            base_url = self.base_url
+
+        base_url = base_url.rstrip('/')
+
+        return base_url
+
     def _save(self, name, content):
         endpoint = "{base_url}/api/new".format(base_url=self.admin_url)
 
@@ -89,30 +98,16 @@ class BettyCropperStorage(Storage):
         return str(r.json()["id"])
 
     def url(self, ratio="original", width=600, format="jpg", fixed=False):
-        # Allows request to use fixed url from settings
-        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
-        if not base_url:
-            base_url = self.base_url
-
-        base_url = base_url.rstrip('/')
-
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
-            base_url=base_url,
+            base_url=self.build_base_url(fixed),
             id_string=self.id_string,
             ratio=ratio,
             width=width,
             format=format)
 
     def animated_url(self, format="gif", fixed=False):
-        # Allows request to use fixed url from settings
-        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
-        if not base_url:
-            base_url = self.base_url
-
-        base_url = base_url.rstrip('/')
-
         return "{base_url}/{id_string}/animated/original.{format}".format(
-            base_url=base_url,
+            base_url=self.build_base_url(fixed),
             id_string=self.id_string,
             format=format
         )
