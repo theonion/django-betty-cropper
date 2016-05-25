@@ -81,9 +81,7 @@ class BettyCropperStorage(Storage):
         if not base_url:
             base_url = self.base_url
 
-        base_url = base_url.rstrip('/')
-
-        return base_url
+        return base_url.rstrip('/')
 
     def _save(self, name, content):
         endpoint = "{base_url}/api/new".format(base_url=self.admin_url)
