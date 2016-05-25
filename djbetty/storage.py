@@ -49,10 +49,9 @@ class BettyCropperStorage(Storage):
             return self._private_token
         return settings.BETTY_PRIVATE_TOKEN
 
-    @property
-    def id_string(self):
+    def build_id_string(self, name):
         id_string = ""
-        for index, char in enumerate(str(self.id)):
+        for index, char in enumerate(str(name)):
             if index % 4 == 0 and index != 0:
                 id_string += "/"
             id_string += char
@@ -95,17 +94,17 @@ class BettyCropperStorage(Storage):
 
         return str(r.json()["id"])
 
-    def url(self, ratio="original", width=600, format="jpg", fixed=False):
+    def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
             base_url=self.build_base_url(fixed),
-            id_string=self.id_string,
+            id_string=self.id_string(name),
             ratio=ratio,
             width=width,
             format=format)
 
-    def animated_url(self, format="gif", fixed=False):
+    def animated_url(self, name, format="gif", fixed=False):
         return "{base_url}/{id_string}/animated/original.{format}".format(
             base_url=self.build_base_url(fixed),
-            id_string=self.id_string,
+            id_string=self.id_string(name),
             format=format
         )

@@ -21,10 +21,10 @@ class AnonymousImageField(object):
         self.storage = default_storage
 
     def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=False):
-        return self.storage.url(ratio=ratio, width=width, format=format, fixed=fixed)
+        return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
     def get_animated_url(self, format="gif", fixed=False):
-        return self.storage.animated_url(ratio="origninal", format=format, fixed=fixed)
+        return self.storage.animated_url(format=format, fixed=fixed)
 
 
 def coerce_image(image):
