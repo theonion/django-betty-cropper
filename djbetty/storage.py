@@ -88,7 +88,7 @@ class BettyCropperStorage(Storage):
 
         return str(r.json()["id"])
 
-    def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
+    def url(self, ratio="original", width=600, format="jpg", fixed=False):
         # Allows request to use fixed url from settings
         base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
         if not base_url:
@@ -103,7 +103,7 @@ class BettyCropperStorage(Storage):
             width=width,
             format=format)
 
-    def animated_url(self, name, format="gif", fixed=False):
+    def animated_url(self, format="gif", fixed=False):
         # Allows request to use fixed url from settings
         base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
         if not base_url:
