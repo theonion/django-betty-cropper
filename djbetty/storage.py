@@ -97,7 +97,7 @@ class BettyCropperStorage(Storage):
     def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
         return "{base_url}/{id_string}/{ratio}/{width}.{format}".format(
             base_url=self.build_base_url(fixed),
-            id_string=self.id_string(name),
+            id_string=self.build_id_string(name),
             ratio=ratio,
             width=width,
             format=format)
@@ -105,6 +105,6 @@ class BettyCropperStorage(Storage):
     def animated_url(self, name, format="gif", fixed=False):
         return "{base_url}/{id_string}/animated/original.{format}".format(
             base_url=self.build_base_url(fixed),
-            id_string=self.id_string(name),
+            id_string=self.build_id_string(name),
             format=format
         )
