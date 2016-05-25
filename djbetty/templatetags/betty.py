@@ -23,6 +23,9 @@ class AnonymousImageField(object):
     def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=0):
         return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
+    def get_animated_url(self, format="gif", fixed=0):
+        return self.storage.animated_url(ratio="origninal", format=format, fixed=fixed)
+
 
 def coerce_image(image):
     """For right now, we need to be able to pass a string, or an int, or None
@@ -77,6 +80,15 @@ def cropped(context, image, ratio="16x9", width=600, format="jpg", fixed=0):
 
     t = select_template(["betty/cropped.html", "betty/cropped_default.html"])
     return t.render(context)
+
+
+@register.simple_tag
+def animated_url(image, format="gif", fixed=0):
+    image = coerce_image(image)
+    if image is None:
+        return ""
+
+    return image.get_animated_url(format=format, fixed=fixed)
 
 
 @register.simple_tag

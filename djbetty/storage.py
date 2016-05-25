@@ -99,3 +99,23 @@ class BettyCropperStorage(Storage):
             ratio=ratio,
             width=width,
             format=format)
+
+    def animated_url(self, name, format="gif", fixed=0):
+        id_string = ""
+        for index, char in enumerate(str(name)):
+            if index % 4 == 0 and index != 0:
+                id_string += "/"
+            id_string += char
+
+        # Allows request to use fixed url from settings
+        base_url = getattr(settings, 'BETTY_FIXED_URL', None) if fixed else None
+        if not base_url:
+            base_url = self.base_url
+
+        base_url = base_url.rstrip('/')
+
+        return "{base_url}/{id_string}/animated/original.{format}".format(
+            base_url=base_url,
+            id_string=id_string,
+            format=format
+        )

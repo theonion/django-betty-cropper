@@ -113,6 +113,9 @@ class ImageFieldFile(FieldFile):
     def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=0):
         return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
+    def get_animated_url(self, format="gif", fixed=0):
+        return self.storage.animated_url(self.id, format=format, fixed=fixed)
+
 
 class ImageDescriptor(FileDescriptor):
     """A custom descriptor for a Betty Cropper image
