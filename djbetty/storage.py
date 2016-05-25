@@ -78,7 +78,7 @@ class BettyCropperStorage(Storage):
 
         return str(r.json()["id"])
 
-    def url(self, name, ratio="original", width=600, format="jpg", fixed=0):
+    def url(self, name, ratio="original", width=600, format="jpg", fixed=False):
 
         id_string = ""
         for index, char in enumerate(str(name)):
@@ -100,7 +100,7 @@ class BettyCropperStorage(Storage):
             width=width,
             format=format)
 
-    def animated_url(self, name, format="gif", fixed=0):
+    def animated_url(self, name, format="gif", fixed=False):
         id_string = ""
         for index, char in enumerate(str(name)):
             if index % 4 == 0 and index != 0:

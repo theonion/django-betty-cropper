@@ -20,10 +20,10 @@ class AnonymousImageField(object):
         self.id = id
         self.storage = default_storage
 
-    def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=0):
+    def get_crop_url(self, ratio="original", width=600, format="jpg", fixed=False):
         return self.storage.url(self.id, ratio=ratio, width=width, format=format, fixed=fixed)
 
-    def get_animated_url(self, format="gif", fixed=0):
+    def get_animated_url(self, format="gif", fixed=False):
         return self.storage.animated_url(ratio="origninal", format=format, fixed=fixed)
 
 
@@ -53,7 +53,7 @@ def coerce_image(image):
 
 
 @register.simple_tag
-def cropped_url(image, ratio="16x9", width=600, format="jpg", fixed=0):
+def cropped_url(image, ratio="16x9", width=600, format="jpg", fixed=False):
     image = coerce_image(image)
     if image is None:
         return ""
@@ -62,7 +62,7 @@ def cropped_url(image, ratio="16x9", width=600, format="jpg", fixed=0):
 
 
 @register.simple_tag(takes_context=True)
-def cropped(context, image, ratio="16x9", width=600, format="jpg", fixed=0):
+def cropped(context, image, ratio="16x9", width=600, format="jpg", fixed=False):
     image = coerce_image(image)
     if not image or not image.id:
         if hasattr(settings, 'BETTY_DEFAULT_IMAGE'):
@@ -83,7 +83,7 @@ def cropped(context, image, ratio="16x9", width=600, format="jpg", fixed=0):
 
 
 @register.simple_tag
-def animated_url(image, format="gif", fixed=0):
+def animated_url(image, format="gif", fixed=False):
     image = coerce_image(image)
     if image is None:
         return ""
